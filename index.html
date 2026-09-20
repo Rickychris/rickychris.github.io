@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ricky Chris Pinto — Full-Stack Engineer, Security Products</title>
+<meta name="description" content="Senior full-stack engineer building threat detection and investigation tools at LinkShadow. Go, React, Python. Dubai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:    #E7EBF0;
+    --raised:   #F2F5F8;
+    --ink:      #0F1C2B;
+    --ink-soft: #5D6E80;
+    --hair:     #C3CCD6;
+    --steel:    #9BA9B8;
+    --signal:   #C8741A;
+
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:    #0B1520;
+      --raised:   #12202E;
+      --ink:      #DFE7EF;
+      --ink-soft: #8195A8;
+      --hair:     #243547;
+      --steel:    #46586B;
+      --signal:   #E0913C;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:    #0B1520;
+    --raised:   #12202E;
+    --ink:      #DFE7EF;
+    --ink-soft: #8195A8;
+    --hair:     #243547;
+    --steel:    #46586B;
+    --signal:   #E0913C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #field {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .72;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 3px;
+  }
+
+  /* ---------- hero ---------- */
+
+  header { padding: 76px 0 0; }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 800;
+    font-size: clamp(2.1rem, 6.2vw, 3.55rem);
+    line-height: 1.07;
+    letter-spacing: -0.028em;
+    margin: 0 0 26px;
+    max-width: 17ch;
+  }
+
+  .whoami {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    margin: 0;
+    max-width: 46ch;
+  }
+  .whoami b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- telemetry ---------- */
+
+  .telemetry {
+    margin: 58px 0 0;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    padding: 22px 0 18px;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 74px;
+    overflow: hidden;
+  }
+
+  .bar {
+    flex: 1 1 auto;
+    min-width: 2px;
+    background: var(--steel);
+    height: 6%;
+    transform-origin: bottom;
+    transform: scaleY(0);
+    transition: transform .34s cubic-bezier(.2,.75,.3,1);
+  }
+  .bar.lit { transform: scaleY(1); }
+  .bar.flag {
+    background: var(--signal);
+    box-shadow: 0 0 14px -2px var(--signal);
+  }
+
+  .readout {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    letter-spacing: 0.01em;
+  }
+  .readout .hit { color: var(--signal); }
+  .readout span:last-child { text-align: right; }
+
+  /* ---------- sections ---------- */
+
+  section { padding: 66px 0 0; }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: 0.83rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    margin: 0 0 26px;
+    padding-bottom: 11px;
+    border-bottom: 1px solid var(--hair);
+  }
+
+  .prose { max-width: 66ch; margin: 0; }
+  .prose p { margin: 0 0 18px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  /* ---------- work ---------- */
+
+  .entry {
+    padding: 26px 0;
+    border-bottom: 1px solid var(--hair);
+    display: grid;
+    grid-template-columns: 1fr 190px;
+    gap: 14px 40px;
+    align-items: start;
+  }
+  .entry:first-of-type { padding-top: 4px; }
+
+  .entry h3 {
+    font-family: var(--sans);
+    font-size: 1.16rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    margin: 0 0 9px;
+  }
+  .entry p { margin: 0; max-width: 58ch; color: var(--ink-soft); font-size: 16px; }
+  .entry p b { color: var(--ink); font-weight: 600; }
+
+  .stack {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    padding-top: 5px;
+  }
+
+  /* ---------- roles ---------- */
+
+  .role {
+    display: grid;
+    grid-template-columns: 148px 1fr;
+    gap: 6px 28px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .role:first-of-type { padding-top: 2px; }
+  .when {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    padding-top: 6px;
+    white-space: nowrap;
+  }
+  .role h3 {
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0 0 3px;
+  }
+  .org { font-size: 15px; color: var(--ink-soft); margin: 0 0 7px; }
+  .role p.note { margin: 0; font-size: 15.5px; color: var(--ink-soft); max-width: 56ch; }
+
+  /* ---------- skills ---------- */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .card {
+    position: relative;
+    overflow: hidden;
+    background: var(--raised);
+    border: 1px solid var(--hair);
+    padding: 20px 20px 18px;
+    transition: border-color .22s ease, transform .22s ease;
+  }
+  .card.wide { grid-column: 1 / -1; }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    left: -60%;
+    width: 45%;
+    background: linear-gradient(100deg, transparent, var(--signal), transparent);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .card:hover, .card:focus-visible {
+    border-color: var(--signal);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .card:hover::after, .card:focus-visible::after {
+    animation: sweep .62s ease-out;
+  }
+  @keyframes sweep {
+    0%   { left: -60%; opacity: 0; }
+    12%  { opacity: .16; }
+    100% { left: 115%; opacity: 0; }
+  }
+
+  .card h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    transition: color .22s ease;
+  }
+  .card:hover h3, .card:focus-visible h3 { color: var(--signal); }
+
+  .card p {
+    margin: 0 0 14px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1;
+    padding: 5px 8px;
+    border: 1px solid var(--hair);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .studied {
+    margin: 14px 0 0;
+    padding-top: 15px;
+    border-top: 1px solid var(--hair);
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- contact ---------- */
+
+  #contact { padding-bottom: 96px; }
+  .pitch {
+    font-family: var(--sans);
+    font-size: clamp(1.28rem, 3.4vw, 1.72rem);
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    line-height: 1.32;
+    max-width: 22ch;
+    margin: 0 0 30px;
+  }
+  .links { display: flex; flex-wrap: wrap; gap: 13px; }
+  .links a {
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 11px 20px;
+    border: 1px solid var(--hair);
+    background: var(--raised);
+    transition: border-color .16s, color .16s;
+  }
+  .links a:hover { border-color: var(--signal); color: var(--signal); }
+
+  footer {
+    border-top: 1px solid var(--hair);
+    padding: 22px 0 40px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 720px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 20px; }
+    header { padding-top: 46px; }
+    section { padding-top: 50px; }
+    .entry { grid-template-columns: 1fr; gap: 12px; }
+    .stack { padding-top: 0; }
+    .role { grid-template-columns: 1fr; gap: 4px; }
+    .when { padding-top: 0; order: -1; }
+    .grid { grid-template-columns: 1fr; }
+    .bars { height: 56px; gap: 2px; }
+    .readout { font-size: 10.5px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar { transition: none; transform: scaleY(1); }
+    .card { transition: border-color .2s ease; }
+    .card:hover, .card:focus-visible { transform: none; }
+    .card:hover::after, .card:focus-visible::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="field" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+<header>
+  <h1>I build the tools security teams use to find what shouldn't be there.</h1>
+  <p class="whoami">Senior full-stack engineer at <b>LinkShadow</b> in Dubai, working on threat detection and investigation across network, identity, and data. Seven years in, four of them in security.</p>
+
+  <div class="telemetry">
+    <div class="bars" id="bars" aria-hidden="true"></div>
+    <div class="readout">
+      <span>4,096 events &nbsp;·&nbsp; 11ms p95</span>
+      <span class="hit">1 flagged &mdash; lateral movement</span>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <h2>What I actually do</h2>
+  <div class="prose">
+    <p>Security tooling is a demanding place to write software. The datasets are enormous and high-cardinality, the queries are exploratory rather than predictable, and the person on the other end is an analyst halfway through an investigation with no patience for a slow filter or an ambiguous chart.</p>
+    <p>Getting that right means caring about query shape on the backend and render performance on the frontend at the same time, which is why I've never been much good at staying on one side of the stack. Most of my work sits at the seam: making a Go service fast enough that the interface in front of it can stay honest about what's happening in the data.</p>
+    <p>Before security I spent three years in consumer-scale web engineering — Next.js and Node at BYJU'S Exam Prep, React and Flutter client work at Moonraft. I came into all of this from a mechanical engineering degree and taught myself the rest.</p>
+  </div>
+</section>
+
+<section id="work">
+  <h2>Selected work at LinkShadow</h2>
+
+  <div class="entry">
+    <div>
+      <h3>Shadow360 search performance</h3>
+      <p>Rebuilt the backend of LinkShadow's threat investigation search layer in <b>Go</b>, using multiprocessing to cut response times on large telemetry datasets. Rewrote the interface to stream results in real time over web workers and sockets, so analysts see matches as they arrive instead of waiting on a complete result set.</p>
+    </div>
+    <div class="stack">Go<br>Web Workers<br>WebSockets<br>React</div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <h3>Legacy frontend migration</h3>
+      <p>Led the move of the product's legacy frontend to React, introducing <b>Vite</b> as the build tool. Ran both architectures in parallel through the transition so feature work never stopped, and designed the module structure the team builds on now.</p>
+    </div>
+    <div class="stack">React<br>Vite<br>TypeScript</div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <h3>Delivery pipeline and engineering standards</h3>
+      <p>Built the GitLab CI/CD pipelines and environment-specific builds the team ships through. Set up testing infrastructure, wrote the coverage that made refactoring safe, introduced linting and pre-commit hooks, and mentor the junior engineers on the team.</p>
+    </div>
+    <div class="stack">GitLab CI/CD<br>Testing<br>Code review</div>
+  </div>
+
+  <div class="entry">
+    <div>
+      <h3>Language models in the product surface</h3>
+      <p>Integrated LLMs into the platform for real-time analyst interaction over socket connections, and built the API layer across <b>Django</b> and <b>FastAPI</b> that feeds it — including the performance work needed to keep high-volume data paths responsive.</p>
+    </div>
+    <div class="stack">Python<br>Django<br>FastAPI<br>WebSockets</div>
+  </div>
+</section>
+
+<section id="experience">
+  <h2>Where I've worked</h2>
+
+  <div class="role">
+    <div class="when">Nov 2022 — now</div>
+    <div>
+      <h3>Senior Software Engineer</h3>
+      <p class="org">LinkShadow DMCC &middot; Dubai</p>
+      <p class="note">Unified cybersecurity platform spanning network, identity, and data — NDR, ITDR, and DSPM — used by enterprise security teams across government, finance, energy, and healthcare.</p>
+    </div>
+  </div>
+
+  <div class="role">
+    <div class="when">Nov 2021 — Nov 2022</div>
+    <div>
+      <h3>Senior Software Engineer</h3>
+      <p class="org">BYJU'S Exam Prep (formerly Gradeup) &middot; Noida</p>
+      <p class="note">High-traffic learning products in Next.js, React, and Node. Page performance and SEO, GraphQL integration, and end-to-end analytics instrumentation.</p>
+    </div>
+  </div>
+
+  <div class="role">
+    <div class="when">Jul 2019 — Nov 2021</div>
+    <div>
+      <h3>Software Engineer</h3>
+      <p class="org">Moonraft Innovation Labs &middot; Bengaluru</p>
+      <p class="note">Design-led consultancy. Delivered UI for the UST website redesign, SoCalGas Newsroom, the Vanguard Charitable portal, and the Adva mobile app, in React and Flutter.</p>
+    </div>
+  </div>
+</section>
+
+<section id="toolkit">
+  <h2>What I work with</h2>
+
+  <div class="grid">
+
+    <div class="card" tabindex="0">
+      <h3>Systems performance</h3>
+      <p>Rebuilding hot paths so the interface in front of them can stay honest about the data.</p>
+      <div class="tags"><span>Go</span><span>concurrency</span><span>profiling</span></div>
+    </div>
+
+    <div class="card" tabindex="0">
+      <h3>Frontend engineering</h3>
+      <p>Led the migration off a legacy codebase and set the module structure the team builds on.</p>
+      <div class="tags"><span>React</span><span>Next.js</span><span>Vite</span><span>TypeScript</span><span>Tailwind</span></div>
+    </div>
+
+    <div class="card" tabindex="0">
+      <h3>Backend services</h3>
+      <p>APIs across two Python frameworks, tuned for high-volume data paths.</p>
+      <div class="tags"><span>Django</span><span>FastAPI</span><span>Flask</span><span>Node</span><span>GraphQL</span></div>
+    </div>
+
+    <div class="card" tabindex="0">
+      <h3>Real-time streaming</h3>
+      <p>Pushing search results to analysts as matches arrive, not after the query finishes.</p>
+      <div class="tags"><span>WebSockets</span><span>Web Workers</span><span>LLM integration</span></div>
+    </div>
+
+    <div class="card" tabindex="0">
+      <h3>Data at scale</h3>
+      <p>Security telemetry across relational, columnar, and in-memory stores.</p>
+      <div class="tags"><span>PostgreSQL</span><span>Redis</span><span>Parquet</span><span>SQLite</span><span>MongoDB</span></div>
+    </div>
+
+    <div class="card" tabindex="0">
+      <h3>Security domain</h3>
+      <p>Four years across network, identity, and data threat detection.</p>
+      <div class="tags"><span>NDR</span><span>ITDR</span><span>DSPM</span><span>threat analytics</span></div>
+    </div>
+
+    <div class="card wide" tabindex="0">
+      <h3>Engineering practice</h3>
+      <p>The unglamorous half of senior work — pipelines that ship safely, coverage that makes refactoring possible, and bringing junior engineers along.</p>
+      <div class="tags"><span>GitLab CI/CD</span><span>testing</span><span>code review</span><span>linting</span><span>mentoring</span></div>
+    </div>
+
+  </div>
+
+  <p class="studied">PG Diploma in Data Science, IIIT Bangalore &middot; BE Mechanical Engineering, VTU</p>
+</section>
+
+<section id="contact">
+  <h2>Get in touch</h2>
+  <p class="pitch">Always glad to talk with people building in security.</p>
+  <div class="links">
+    <a href="mailto:rickychris6@gmail.com">rickychris6@gmail.com</a>
+    <a href="https://www.linkedin.com/in/ricky-chris-pinto/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <span>Ricky Chris Pinto &mdash; Dubai, UAE</span>
+  <span id="year"></span>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var host = document.getElementById('bars');
+  if (!host) return;
+
+  var COUNT = window.innerWidth < 720 ? 44 : 68;
+  var FLAG = Math.round(COUNT * 0.72);
+  var seed = 20260920;
+  function rnd() { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+
+  var nodes = [];
+  for (var i = 0; i < COUNT; i++) {
+    var b = document.createElement('div');
+    b.className = 'bar';
+    var h;
+    if (i === FLAG) { h = 100; b.classList.add('flag'); }
+    else {
+      h = 14 + rnd() * 34;
+      if (rnd() > 0.88) h += 16;          // occasional ordinary burst
+    }
+    b.style.height = h.toFixed(1) + '%';
+    host.appendChild(b);
+    nodes.push(b);
+  }
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (reduce.matches) {
+    nodes.forEach(function (b) { b.classList.add('lit'); });
+    return;
+  }
+
+  // single page-load sweep, left to right, then the anomaly lands last
+  nodes.forEach(function (b, i) {
+    var delay = i === FLAG ? COUNT * 13 + 260 : i * 13;
+    setTimeout(function () { b.classList.add('lit'); }, delay);
+  });
+})();
+
+/* Entity field: nodes drift quietly; links resolve around the pointer,
+   the way an investigation graph expands when you pivot on an entity. */
+(function () {
+  var cv = document.getElementById('field');
+  if (!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var W = 0, H = 0, dpr = 1, nodes = [], raf = null;
+  var steel = '#9BA9B8', signal = '#C8741A';
+
+  var REACH = 190;   // how far the pointer's influence carries
+  var LINK  = 108;   // node-to-node link distance inside that reach
+
+  var px = -9999, py = -9999;   // raw pointer
+  var cx = -9999, cy = -9999;   // eased pointer
+  var live = false;
+
+  function theme() {
+    var cs = getComputedStyle(document.documentElement);
+    steel = (cs.getPropertyValue('--steel') || steel).trim();
+    signal = (cs.getPropertyValue('--signal') || signal).trim();
+  }
+
+  function build() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    cv.width = W * dpr;
+    cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var count = Math.round(Math.min(96, Math.max(34, (W * H) / 15000)));
+    nodes = [];
+    for (var i = 0; i < count; i++) {
+      var flag = Math.random() > 0.93;
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.17,
+        vy: (Math.random() - 0.5) * 0.17,
+        r: flag ? 2.1 : 1.1 + Math.random() * 0.9,
+        flag: flag,
+        glow: 0
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineCap = 'round';
+
+    // links: pointer to nearby nodes, and between those nodes
+    if (live) {
+      for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[i];
+        var dx = n.x - cx, dy = n.y - cy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d > REACH) continue;
+
+        var near = 1 - d / REACH;
+        ctx.globalAlpha = near * 0.32;
+        ctx.strokeStyle = n.flag ? signal : steel;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(n.x, n.y);
+        ctx.stroke();
+
+        for (var j = i + 1; j < nodes.length; j++) {
+          var m = nodes[j];
+          var mdx = m.x - cx, mdy = m.y - cy;
+          if (Math.sqrt(mdx * mdx + mdy * mdy) > REACH) continue;
+          var ex = m.x - n.x, ey = m.y - n.y;
+          var ed = Math.sqrt(ex * ex + ey * ey);
+          if (ed > LINK) continue;
+          ctx.globalAlpha = near * (1 - ed / LINK) * 0.26;
+          ctx.strokeStyle = (n.flag || m.flag) ? signal : steel;
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(m.x, m.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // nodes
+    for (var k = 0; k < nodes.length; k++) {
+      var p = nodes[k];
+      ctx.globalAlpha = (p.flag ? 0.42 : 0.2) + p.glow * 0.5;
+      ctx.fillStyle = p.flag ? signal : steel;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r + p.glow * 1.5, 0, 6.2832);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function step() {
+    cx += (px - cx) * 0.12;
+    cy += (py - cy) * 0.12;
+
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < -10) n.x = W + 10; else if (n.x > W + 10) n.x = -10;
+      if (n.y < -10) n.y = H + 10; else if (n.y > H + 10) n.y = -10;
+
+      var target = 0;
+      if (live) {
+        var dx = n.x - cx, dy = n.y - cy;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < REACH) {
+          target = 1 - d / REACH;
+          // drift gently away from the pointer, like a graph making room
+          n.x += (dx / (d || 1)) * target * 0.34;
+          n.y += (dy / (d || 1)) * target * 0.34;
+        }
+      }
+      n.glow += (target - n.glow) * 0.09;
+    }
+
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  function start() { if (!raf && !reduce.matches) raf = requestAnimationFrame(step); }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+  window.addEventListener('pointermove', function (e) {
+    px = e.clientX; py = e.clientY;
+    if (!live) { cx = px; cy = py; live = true; }
+  }, { passive: true });
+
+  window.addEventListener('pointerdown', function (e) {
+    px = e.clientX; py = e.clientY;
+    if (!live) { cx = px; cy = py; live = true; }
+  }, { passive: true });
+
+  window.addEventListener('pointerleave', function () { live = false; });
+  document.addEventListener('mouseleave', function () { live = false; });
+
+  function boot() { theme(); build(); draw(); stop(); start(); }
+  boot();
+
+  var t0;
+  window.addEventListener('resize', function () {
+    clearTimeout(t0);
+    t0 = setTimeout(boot, 180);
+  });
+
+  document.addEventListener('visibilitychange', function () {
+    document.hidden ? stop() : start();
+  });
+
+  var dark = window.matchMedia('(prefers-color-scheme: dark)');
+  (dark.addEventListener ? dark.addEventListener.bind(dark, 'change') : dark.addListener.bind(dark))(function () {
+    setTimeout(function () { theme(); draw(); }, 40);
+  });
+
+  (reduce.addEventListener ? reduce.addEventListener.bind(reduce, 'change') : reduce.addListener.bind(reduce))(function () {
+    reduce.matches ? stop() : start();
+  });
+})();
+
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
